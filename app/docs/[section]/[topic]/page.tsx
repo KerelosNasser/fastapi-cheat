@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import { getTopic, getAllSections } from "@/lib/docs"
 import Sidebar from "@/components/Sidebar"
 import TopicPage from "@/components/TopicPage"
+import DocsContent from "@/components/DocsContent"
 import type { Metadata } from "next"
 
 interface PageParams {
@@ -39,10 +40,9 @@ export default async function TopicRoute({ params }: PageParams) {
         activeSectionId={result.section.id}
         activeTopicId={result.topic.id}
       />
-      <main className="flex-1 min-h-[calc(100vh-52px)] overflow-y-auto transition-all duration-200"
-        style={{ marginLeft: "220px" }}>
+      <DocsContent>
         <TopicPage section={result.section} topic={result.topic} />
-      </main>
+      </DocsContent>
     </div>
   )
 }

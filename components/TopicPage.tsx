@@ -33,7 +33,7 @@ export default function TopicPage({ section, topic }: TopicPageProps) {
   }
 
   return (
-    <article className="max-w-3xl mx-auto px-8 py-10">
+    <article className="max-w-3xl mx-auto px-4 sm:px-8 py-10">
       {/* ① HEADER ZONE */}
       <header className="mb-8">
         {/* Breadcrumb */}

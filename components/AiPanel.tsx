@@ -5,10 +5,12 @@ import { X, Send, Copy, Check, Sparkles } from "lucide-react"
 import { useAIPanel } from "@/hooks/useAIPanel"
 import { streamAI } from "@/lib/ai"
 import MarkdownRenderer from "./MarkdownRenderer"
+import { useIsMobile } from "@/hooks/use-mobile"
 import type { Message } from "@/lib/ai"
 
 export default function AiPanel() {
   const { isOpen, initialQuestion, closeAI } = useAIPanel()
+  const isMobile = useIsMobile()
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isStreaming, setIsStreaming] = useState(false)
@@ -22,22 +24,23 @@ export default function AiPanel() {
 
   // Resizing logic
   const startResizing = useCallback((e: React.MouseEvent) => {
+    if (isMobile) return
     e.preventDefault()
     setIsResizing(true)
-  }, [])
+  }, [isMobile])
 
   const stopResizing = useCallback(() => {
     setIsResizing(false)
   }, [])
 
   const resize = useCallback((e: MouseEvent) => {
-    if (isResizing) {
+    if (isResizing && !isMobile) {
       const newWidth = window.innerWidth - e.clientX
       if (newWidth > 320 && newWidth < 800) {
         setPanelWidth(newWidth)
       }
     }
-  }, [isResizing])
+  }, [isResizing, isMobile])
 
   useEffect(() => {
     if (isResizing) {
@@ -135,6 +138,8 @@ export default function AiPanel() {
     setInput("")
   }
 
+  const finalWidth = isMobile ? "100%" : `${panelWidth}px`
+
   return (
     <>
       {/* Backdrop */}
@@ -155,18 +160,20 @@ export default function AiPanel() {
           border-l border-[var(--border)] transition-transform duration-[250ms] ease-in-out
           ${isResizing ? "transition-none" : ""}`}
         style={{
-          width: `${panelWidth}px`,
+          width: finalWidth,
           background: "var(--sidebar-bg)",
           transform: isOpen ? "translateX(0)" : "translateX(100%)",
         }}
         aria-hidden={!isOpen}
       >
         {/* Resize Handle */}
-        <div
-          onMouseDown={startResizing}
-          className="absolute top-0 left-0 bottom-0 w-1.5 cursor-ew-resize hover:bg-[var(--fastapi-teal)]/30 transition-colors z-[60]"
-          title="Drag to resize"
-        />
+        {!isMobile && (
+          <div
+            onMouseDown={startResizing}
+            className="absolute top-0 left-0 bottom-0 w-1.5 cursor-ew-resize hover:bg-[var(--fastapi-teal)]/30 transition-colors z-[60]"
+            title="Drag to resize"
+          />
+        )}
 
         <div className="flex flex-col h-full overflow-hidden">
           {/* Header */}

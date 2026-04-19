@@ -2,32 +2,49 @@
 
 import ThemeToggle from "./ThemeToggle"
 import SearchBar from "./SearchBar"
+import { Menu } from "lucide-react"
+import { useSidebarState } from "@/hooks/useSidebar"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 export default function Navbar() {
+  const { toggleSidebar } = useSidebarState()
+  const isMobile = useIsMobile()
+
   return (
     <header
       className="fixed top-0 left-0 right-0 z-40 h-[52px] flex items-center px-4 gap-4
         bg-[var(--navbar-bg)] border-b border-teal-900/20"
       style={{ borderBottomColor: "rgba(0,150,136,0.15)" }}
     >
+      {/* Mobile Menu Toggle */}
+      {isMobile && (
+        <button
+          onClick={toggleSidebar}
+          className="p-2 rounded-lg hover:bg-white/5 text-[var(--muted)]"
+          aria-label="Toggle Menu"
+        >
+          <Menu size={20} />
+        </button>
+      )}
+
       {/* Logo */}
       <div className="flex items-center gap-3 shrink-0 select-none cursor-pointer" onClick={() => window.location.href = "/"}>
         <FastAPILogo />
-        <div className="flex items-baseline gap-1.5">
+        <div className="flex items-baseline gap-1.5 hidden sm:flex">
           <span className="text-[var(--foreground)] font-bold text-lg tracking-tight">FastAPI</span>
           <span className="text-[var(--fastapi-teal-light)] text-sm font-semibold opacity-90">Docs</span>
         </div>
       </div>
 
       {/* Search — centered */}
-      <div className="flex-1 flex justify-center">
+      <div className="flex-1 flex justify-center max-w-[600px] mx-auto">
         <SearchBar />
       </div>
 
       {/* Right: theme toggle + version badge */}
       <div className="flex items-center gap-3 shrink-0">
         <ThemeToggle />
-        <span className="font-mono text-[12px] font-bold px-3 py-1 rounded-full border border-[var(--fastapi-teal)]/30 text-[var(--fastapi-teal-light)] bg-[var(--fastapi-teal-dim)]">
+        <span className="hidden md:inline-block font-mono text-[12px] font-bold px-3 py-1 rounded-full border border-[var(--fastapi-teal)]/30 text-[var(--fastapi-teal-light)] bg-[var(--fastapi-teal-dim)]">
           v0.1.0
         </span>
       </div>
