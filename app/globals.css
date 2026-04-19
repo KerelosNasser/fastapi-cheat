@@ -1,0 +1,107 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --fastapi-teal: #009688;
+  --fastapi-teal-light: #26A69A;
+  --fastapi-teal-dim: rgba(0, 150, 136, 0.1);
+  --code-bg: #0d1117;
+  --code-bar: #161b22;
+
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --surface: #f8f9fa;
+  --surface-hover: #f0f1f2;
+  --border: #e5e7eb;
+  --muted: #6b7280;
+  --navbar-bg: #ffffff;
+  --sidebar-bg: #f8f9fa;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #e6edf3;
+  --surface: #0d1117;
+  --surface-hover: #161b22;
+  --border: #30363d;
+  --muted: #8b949e;
+  --navbar-bg: #0a0a0a;
+  --sidebar-bg: #0d1117;
+}
+
+@theme inline {
+  --font-sans: var(--font-inter), 'Inter', sans-serif;
+  --font-mono: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-navbar-bg: var(--navbar-bg);
+  --color-sidebar-bg: var(--sidebar-bg);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply dark;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    scrollbar-color: var(--border) transparent;
+    scrollbar-width: thin;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+  }
+  code, pre {
+    font-family: var(--font-mono), monospace;
+  }
+}
+
+/* Sidebar accordion animation */
+.sidebar-children {
+  overflow: hidden;
+  transition: max-height 200ms ease-in-out, opacity 200ms ease;
+}
+
+/* AI Panel slide */
+.ai-panel {
+  transform: translateX(100%);
+  transition: transform 250ms ease;
+}
+.ai-panel.open {
+  transform: translateX(0);
+}
+
+/* Blinking cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.blink-cursor {
+  animation: blink 0.8s step-end infinite;
+}
+
+/* Search dropdown animation */
+.search-dropdown {
+  animation: searchIn 150ms ease forwards;
+}
+@keyframes searchIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
